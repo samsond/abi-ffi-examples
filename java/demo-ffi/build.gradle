@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'  // Ensure the application plugin is applied
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    implementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+application {
+    mainClass = 'org.example.App' // Ensure the correct class path here
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // Specify Java 21
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '--enable-preview'
+}
+
+
+run {
+    jvmArgs = [
+            '--enable-preview',
+            '--enable-native-access=ALL-UNNAMED',
+            "-Djava.library.path=${file("$projectDir/../../rust/binary_search_lib/target/release/libbinary_search_lib.dylib").absolutePath}"
+    ]
+}
