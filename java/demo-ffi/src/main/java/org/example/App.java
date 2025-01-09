@@ -44,7 +44,12 @@ public class App {
             int target = 7;
 
             // Allocate off-heap memory and copy the array data
-            MemorySegment arrSegment = arena.allocateArray(ValueLayout.JAVA_INT, arr);
+            MemorySegment arrSegment = arena.allocate(arr.length * Integer.BYTES, Integer.BYTES);
+
+            // Use a loop to copy the array values into the allocated segment
+            for (int i = 0; i < arr.length; i++) {
+                arrSegment.set(ValueLayout.JAVA_INT, i * Integer.BYTES, arr[i]);
+            }
 
             // Call the binary_search function
             int result = (int) methodHandle.invokeExact(arrSegment, len, target);
