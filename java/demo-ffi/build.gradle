@@ -23,18 +23,18 @@ application {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21) // Specify Java 21
+        languageVersion = JavaLanguageVersion.of(23) // Specify Java 21
     }
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs << '--enable-preview'
+    // Removed --enable-preview since it's no longer needed
+    options.compilerArgs << '--release' << 23 // Use --release to target Java 23
 }
 
 
 run {
     jvmArgs = [
-            '--enable-preview',
             '--enable-native-access=ALL-UNNAMED',
             "-Djava.library.path=${file("$projectDir/../../rust/binary_search_lib/target/release/libbinary_search_lib.dylib").absolutePath}"
     ]
